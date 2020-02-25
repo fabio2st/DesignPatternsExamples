@@ -7,24 +7,34 @@ namespace ObserverC
     class Visor : Observer
     {
         Turnero turnero;
+        string nombre;
 
-        public Visor(Turnero turnero)
+        public Visor(string nombre, Turnero turnero)
         {
-            this.turnero = turnero;
+            this.nombre = nombre;
             turnero.RegisterObserver(this);
+            this.turnero = turnero;
         }
         public void Update(int TotalClientesEnEspera, LinkedList<Atendedor> atendedores)
         {
-            ActualizarVisor(TotalClientesEnEspera, atendedores);
+            ActualizarPantalla(TotalClientesEnEspera, atendedores);
         }
-        private static void ActualizarVisor(int TotalClientesEnEspera, LinkedList<Atendedor> atendedores)
+        private void ActualizarPantalla(int TotalClientesEnEspera, LinkedList<Atendedor> atendedores)
         {
-            Console.WriteLine("Lista de atendidos");
+            Console.WriteLine(nombre + " dice");
             foreach (Atendedor item in atendedores)
             {
                 Console.WriteLine(item + "  " + item.Cliente);
             };
             Console.WriteLine("Total clientes en espera: " + TotalClientesEnEspera);
+        }
+        public override string ToString()
+        {
+            return nombre;
+        }
+        ~Visor()
+        {
+            turnero.RemoveObserver(this);
         }
     }
 }

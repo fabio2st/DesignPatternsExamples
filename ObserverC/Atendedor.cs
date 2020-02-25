@@ -8,27 +8,35 @@ namespace ObserverC
     {
         string nombre;
         Turnero turnero;
-        int totalClientes;
+        int totalClientesEnEspera;
         public Atendedor(string Nombre,Turnero turnero)
         {
             this.nombre = Nombre;
-            this.turnero = turnero;
             turnero.RegisterObserver(this);
+            this.turnero = turnero;
         }
-      internal Cliente Cliente { get; set; }
+        internal Cliente Cliente { get; set; }
         public void LlamarCliente()
         {
-            if (totalClientes > 0)
+            if (totalClientesEnEspera > 0)
                 turnero.LlamarCliente(this);
         }
         public void Update(int TotalClientesEnEspera, LinkedList<Atendedor> atendedores)
         {
-            totalClientes = TotalClientesEnEspera;
+            totalClientesEnEspera = TotalClientesEnEspera;
+            ActualizarPantalla();
+        }
+        private void ActualizarPantalla()
+        {
+            Console.WriteLine(this + " dice: hay {0} clientes en espera", totalClientesEnEspera);
         }
         public override string ToString()
         {
             return nombre;
         }
-
+        ~Atendedor()
+        {
+            turnero.RemoveObserver(this);
+        }
     }
 }
